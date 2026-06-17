@@ -1,2 +1,2 @@
 # tamrin fastapi 
-    docker uvicorn postgreaql + sqlalchemy jwt Oauth2 websocket pytest pydantic
+    docker uvicorn postgreSQL + sqlalchemy jwt Oauth2 websocket pytest pydantic
