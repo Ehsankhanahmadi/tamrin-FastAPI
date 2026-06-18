@@ -1,7 +1,9 @@
-from fastapi import FastAPI , Path, Query
+from fastapi import FastAPI , Path, Query, Body
 from fastapi.responses import JSONResponse
+from fastapi import status
 # import uvicorn
 from typing import Annotated
+from pydantic import BaseModel , Field
 
 app = FastAPI()
 
@@ -42,6 +44,20 @@ async def queryfunc (find:Annotated[list[str],Query(description="find data with 
     if find:
         result = [item for item in data if any(i for i in find if i.lower() in item["title"].lower())]
         return JSONResponse(content=result,status_code=200)
+
+class Data(BaseModel):
+    title : Annotated[str, Field(max_length=5,description="should enter title letter than 5 caracter")]
+    # decs = Annotated[str,Body()]
+    decs : str
+
+@app.post("/create")
+# async def createdata(newdata:Annotated[Data,Body(embed=True)]):
+async def createdata(newdata:Annotated[Data,Body()]):
+    data.append(newdata.model_dump())
+    return JSONResponse(status_code=status.HTTP_201_CREATED,content={
+        "new":newdata.model_dump(),
+        "alldata":data
+    })
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app",host="127.0.0.1",reload=True)
