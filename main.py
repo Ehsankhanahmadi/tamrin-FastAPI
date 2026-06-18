@@ -1,4 +1,4 @@
-from fastapi import FastAPI , Path, Query, Body
+from fastapi import FastAPI , Path, Query, Body, Form
 from fastapi.responses import JSONResponse
 from fastapi import status
 # import uvicorn
@@ -58,6 +58,26 @@ async def createdata(newdata:Annotated[Data,Body()]):
         "new":newdata.model_dump(),
         "alldata":data
     })
+
+
+User = [
+    {"username":"amir","password":"amir"},
+    {"username":"ehsan","password":"1234"},
+]
+
+class UserMain(BaseModel):
+    username:Annotated[str,Form()]
+    password:Annotated[str,Form()]
+
+@app.post("/login")
+async def login(user:Annotated[UserMain,Form()]):
+    for u in User:
+        if user.username.lower() == u["username"].lower() and user.password == u['password']:
+            return JSONResponse(status_code=status.HTTP_200_OK,content={
+                'message':f"welcome to home {user.username}"
+            })
+    return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,content={"message":"not found"})
+
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app",host="127.0.0.1",reload=True)
