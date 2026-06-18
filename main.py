@@ -59,7 +59,6 @@ async def createdata(newdata:Annotated[Data,Body()]):
         "alldata":data
     })
 
-
 User = [
     {"username":"amir","password":"amir"},
     {"username":"ehsan","password":"1234"},
@@ -77,7 +76,6 @@ async def login(user:Annotated[UserMain,Form()]):
                 'message':f"welcome to home {user.username}"
             })
     return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,content={"message":"not found"})
-
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app",host="127.0.0.1",reload=True)
