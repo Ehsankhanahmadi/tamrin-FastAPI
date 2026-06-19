@@ -1,11 +1,29 @@
-from fastapi import FastAPI , Path, Query, Body, Form
+from fastapi import FastAPI , Path, Query, Body, Form, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi import status
 # import uvicorn
 from typing import Annotated
 from pydantic import BaseModel , Field
+from pathlib import Path as p
+import aiofiles
 
 app = FastAPI()
+
+file_dirctory = p("./uploads")
+file_dirctory.mkdir(exist_ok=True)
+
+@app.post("/upload")
+async def uploadfile(file:Annotated[UploadFile,File()],name:Annotated[str,Form()]):
+    filename = file_dirctory / file.filename
+
+    async with aiofiles.open(filename,"wb") as buffer:
+        await buffer.write(await file.read())
+
+    return {
+        "fileSize":file.size,
+        "name":name,
+        "filename":filename
+    }
 
 data = [
     {
