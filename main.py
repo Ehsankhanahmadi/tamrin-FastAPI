@@ -1,4 +1,4 @@
-from fastapi import FastAPI , Path, Query, Body, Form, File, UploadFile, Header
+from fastapi import FastAPI , Path, Query, Body, Form, File, UploadFile, Header, Cookie, Request
 from fastapi.responses import JSONResponse
 from fastapi import status
 # import uvicorn
@@ -40,9 +40,38 @@ app = FastAPI()
 #     },
 # ]
 
-# @app.get("/")
-# async def startup_event():
-#     return {"Message:": "Hello World"}
+# inmemorylistip:list[dict[str,str]] = []
+# def isratelimit(ip:str) -> bool:
+#     for ipadder in inmemorylistip:
+#         if ipadder["address"] == ip:
+#             if ipadder["usage_count"] <= 5:
+#                 return True
+#             else:
+#                 return False
+#     inmemorylistip.append({"address":ip,"usage_count":0})
+#     return False
+
+listip:list[dict[str,str]] = []
+def checkip(ip:str) -> bool:
+    for i in listip:
+        if i["address"] == ip:
+            if i["count"] < 4 :
+                return True
+            else:
+                return False
+    listip.append({"address":ip,"count":0})
+    
+
+@app.get("/")
+async def startup_event(req:Request):
+    # print(req.client.host)
+    # limit = isratelimit(req.client.host)
+    limit = checkip(req.client.host)
+    if limit:
+        return JSONResponse(status_code=status.HTTP_429_TOO_MANY_REQUESTS,content={"message":"to many request"})
+    
+    return {"Message:": "Hello World"}
+    
 
 # @app.get("/course/desc/seo")
 # async def testparamsfunc():
@@ -95,19 +124,29 @@ app = FastAPI()
 #             })
 #     return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,content={"message":"not found"})
 
-class clientHeader(BaseModel):
-    # postmain_token:str
-    x_test:str
+# class clientHeader(BaseModel):
+#     # postmain_token:str
+#     x_test:str
 
-@app.get("/test")
-async def test(headers:Annotated[clientHeader,Header()]):
-# async def herderreq(headers:Annotated[str,Header()]):
-    return {
-        # "postman_token":headers.postmain_token,
-        "x_test":headers.x_test
-        # "headers":headers
-    }
+# @app.get("/test")
+# async def test(headers:Annotated[clientHeader,Header()]):
+# # async def herderreq(headers:Annotated[str,Header()]):
+#     return {
+#         # "postman_token":headers.postmain_token,
+#         "x_test":headers.x_test
+#         # "headers":headers
+#     }
 
+# class Cookiet(BaseModel):
+#     name:str
+#     age:int
+
+# @app.get("/testcookie")
+# async def test(cookie:Annotated[Cookiet,Cookie()]):
+#     return JSONResponse(content={
+#         "name":cookie.name,
+#         "age":cookie.age
+#     },status_code=status.HTTP_200_OK)
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app",host="127.0.0.1",reload=True)
