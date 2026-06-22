@@ -1,5 +1,5 @@
 from fastapi import FastAPI , Path, Query, Body, Form, File, UploadFile, Header, Cookie, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import Response, JSONResponse, PlainTextResponse, HTMLResponse, RedirectResponse, FileResponse, StreamingResponse
 from fastapi import status
 # import uvicorn
 from typing import Annotated
@@ -161,6 +161,16 @@ app = FastAPI()
 # async def useradd(user:UserIn) -> User:
 #     listuser.append(user)
 #     return user
+
+# class response 
+# Response
+# JSONResponse
+# PlainTextResponse
+# HTMLResponse
+# RedirectResponse
+# FileResponse
+# StreamingResponser
+# deafult_response_class
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app",host="127.0.0.1",reload=True)
