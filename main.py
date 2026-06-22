@@ -51,26 +51,26 @@ app = FastAPI()
 #     inmemorylistip.append({"address":ip,"usage_count":0})
 #     return False
 
-listip:list[dict[str,str]] = []
-def checkip(ip:str) -> bool:
-    for i in listip:
-        if i["address"] == ip:
-            if i["count"] < 4 :
-                return True
-            else:
-                return False
-    listip.append({"address":ip,"count":0})
+# listip:list[dict[str,str]] = []
+# def checkip(ip:str) -> bool:
+#     for i in listip:
+#         if i["address"] == ip:
+#             if i["count"] < 4 :
+#                 return True
+#             else:
+#                 return False
+#     listip.append({"address":ip,"count":0})
     
 
-@app.get("/")
-async def startup_event(req:Request):
-    # print(req.client.host)
-    # limit = isratelimit(req.client.host)
-    limit = checkip(req.client.host)
-    if limit:
-        return JSONResponse(status_code=status.HTTP_429_TOO_MANY_REQUESTS,content={"message":"to many request"})
+# @app.get("/")
+# async def startup_event(req:Request):
+#     # print(req.client.host)
+#     # limit = isratelimit(req.client.host)
+#     limit = checkip(req.client.host)
+#     if limit:
+#         return JSONResponse(status_code=status.HTTP_429_TOO_MANY_REQUESTS,content={"message":"to many request"})
     
-    return {"Message:": "Hello World"}
+#     return {"Message:": "Hello World"}
     
 
 # @app.get("/course/desc/seo")
@@ -147,6 +147,20 @@ async def startup_event(req:Request):
 #         "name":cookie.name,
 #         "age":cookie.age
 #     },status_code=status.HTTP_200_OK)
+
+# class User(BaseModel):
+#     name:str
+#     age:int
+
+# class UserIn(User):
+#     password:str
+
+# listuser:list[UserIn] = []
+
+# @app.post("/useradd")
+# async def useradd(user:UserIn) -> User:
+#     listuser.append(user)
+#     return user
 
 # if __name__ == "__main__":
 #     uvicorn.run("main:app",host="127.0.0.1",reload=True)
